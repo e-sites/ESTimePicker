@@ -21,7 +21,7 @@ A custom time picker just like the [Google Calendar Android App](https://www.goo
 ## Installation
 Use cocoapods:
 
-	pod 'ESTimePicker', :git => 'https://github.com/e-sites/ESTimePicker'
+	pod 'ESTimePicker'
 	
 And then import the desired .h file:
 	
