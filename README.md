@@ -22,6 +22,10 @@ A custom time picker just like the [Google Calendar Android App](https://www.goo
 Use cocoapods:
 
 	pod 'ESTimePicker', :git => 'https://github.com/e-sites/ESTimePicker'
+	
+And then import the desired .h file:
+	
+	#import "ESTimePicker.h"
 
 ## Implementation
 ```objective-c
@@ -47,5 +51,5 @@ Use cocoapods:
 This class uses the `ESMathUtils` class (which is included)
 
 
-##License
+## License
 Copyright (C) 2014 e-sites, [http://e-sites.nl/](http://www.e-sites.nl/). Licensed under the MIT license.
