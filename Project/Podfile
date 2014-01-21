@@ -1,0 +1,7 @@
+pod "ESTimePicker", :path => "../ESTimePicker.podspec"
+
+target "Demo" do
+end
+
+target "DemoTests" do
+end
