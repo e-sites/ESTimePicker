@@ -10,5 +10,5 @@ Pod::Spec.new do |s|
 	s.source_files	= 'Classes'
  	s.requires_arc  = false
 	s.framework	 	= 'QuartzCore'	
-	s.dependency 'ESMathUtils', '~> 1.1'
+	#s.dependency 'ESMathUtils', '~> 1.1'
 end
