@@ -62,62 +62,73 @@ typedef NS_ENUM(NSUInteger, ESTimePickerType) {
 /**
  * The delegate of the time picker
  * @discussion You can use the time picker delegate to perform additional actions when an hour or minute is selected
+ * @since v0.1.0
  */
 @property (nonatomic, assign) id<ESTimePickerDelegate> delegate;
 
 /**
  * The color of the round wheel (aka background color)
  * @discussion Default = white
+ * @since v0.1.0
  */
 @property (nonatomic, retain) UIColor *wheelColor;
 
 /**
  * The color if a AM/PM button is pressed or the color of the middot
  * @discussion Default = blue
+ * @since v0.1.1
  */
 @property (nonatomic, retain) UIColor *selectColor;
 
 /**
  * The color of the selected hour or minute
  * @discussion Default = light blue
+ * @since v0.1.1
  */
 @property (nonatomic, retain) UIColor *highlightColor;
 
 /**
  * The color of the text used in the picker
  * @discussion Default = black
+ * @since v0.1.1
  */
 @property (nonatomic, retain) UIColor *textColor;
 
 /**
  * The font to be used in the picker view's labels
  * @discussion Default = system font 17pt
+ * @since v0.1.1
  */
 @property (nonatomic, retain) UIFont *font;
 
 /**
  * The current selected hours
+ * @since v0.1.1
  */
 @property (nonatomic, readwrite) int hours;
 
 /**
  * The current selected minutes
+ * @since v0.1.1
  */
 @property (nonatomic, readwrite) int minutes;
 
 /**
  * Is the picker in a 24-hour format or AM/PM
+ * @since v0.1.1
  */
 @property (nonatomic, readwrite, getter=isNotation24Hours) BOOL notation24Hours;
 
 /**
  * When an hour is selected, should the pickerview automatically go to the minute view
+ * @since v0.1.1
  */
 @property (nonatomic, readwrite, getter=shouldAutomaticallySwitchToMinutes) BOOL automaticallySwitchToMinutes;
 
 /**
  * Snaps the minutes to a specific value
  * @discussion Default = 1
+ * @since v0.1.1
  */
 @property (nonatomic, readwrite) unsigned int minuteSnap;
 
@@ -127,6 +138,7 @@ typedef NS_ENUM(NSUInteger, ESTimePickerType) {
  *      ESTimePickerTypeHours,
  *      ESTimePickerTypeMinutes
  * }
+ * @since v0.1.1
  */
 @property (nonatomic, readwrite) ESTimePickerType type;
 
@@ -140,6 +152,7 @@ typedef NS_ENUM(NSUInteger, ESTimePickerType) {
  * Constructor
  * @param aDelegate the delegate
  * @return a ESTimePicker instance
+ * @since v0.1.1
  */
 - (id)initWithDelegate:(id<ESTimePickerDelegate>)aDelegate;
 
@@ -153,6 +166,7 @@ typedef NS_ENUM(NSUInteger, ESTimePickerType) {
  * Changes the type
  * @param newType ESTimePickerType
  * @param animated BOOL
+ * @since v0.1.1
  */
 - (void)setType:(ESTimePickerType)newType animated:(BOOL)animated;
 
