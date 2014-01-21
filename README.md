@@ -12,6 +12,7 @@ A custom time picker just like the [Google Calendar Android App](https://www.goo
 
 ## Features
 
+- Works both in ARC as in MRC
 - Choose your own colors (background, highlight, selection, text)
 - Choose your own font
 - Both 24 hour notation and AM/PM
