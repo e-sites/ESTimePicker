@@ -16,8 +16,16 @@ A custom time picker just like the Google Calendar Android App
 - Snap the minute view
 - Completelly usable in your own viewcontroller or view
 
+## Installation
+Use cocoapods:
+
+    pod 'ESTimePicker'
+
 ## Implementation
 
     ESTimePicker *timePicker = [[ESTimePicker alloc] initWithDelegate:self];
     [timePicker setFrame:CGRectMake(10, 100, 300, 300)];
     [self.view addSubview:timePicker];
+    
+## Dependencies
+This class uses the ESMathUtils class
