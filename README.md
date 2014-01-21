@@ -1,7 +1,7 @@
 ESTimePicker
 ============
-[![Version](https://cocoapod-badges.herokuapp.com/v/ESTimePicker/badge.png)](http://cocoadocs.org/docsets/ESTimePicker)
 [![Platform](https://cocoapod-badges.herokuapp.com/p/ESTimePicker/badge.png)](http://cocoadocs.org/docsets/ESTimePicker)
+[![Version](https://cocoapod-badges.herokuapp.com/v/ESTimePicker/badge.png)](http://cocoadocs.org/docsets/ESTimePicker)
 
 A custom time picker just like the [Google Calendar Android App](https://www.google.nl/search?q=google+calendar+time+picker&espv=210&es_sm=91&source=lnms&tbm=isch&sa=X&ei=hXPeUsHwLuLCyQOP_YHICg&ved=0CAkQ_AUoAQ&biw=1756&bih=1047)
 
