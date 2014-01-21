@@ -52,4 +52,4 @@ This class uses the `ESMathUtils` class (which is included)
 
 
 ## License
-Copyright (C) 2014 e-sites, [http://e-sites.nl/](http://www.e-sites.nl/). Licensed under the MIT license.
+Copyright (C) 2014 e-sites, [http://e-sites.nl/](http://www.e-sites.nl/). Licensed under the BSD license.
