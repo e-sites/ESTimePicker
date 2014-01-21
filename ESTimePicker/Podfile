@@ -1,2 +1,2 @@
 pod "ESTimePicker", :path => "../ESTimePicker.podspec"
-pod 'ESMathUtils', :path => '../../ESMathUtils/ESMathUtils.podspec'
+pod 'ESMathUtils', :path => '../ESMathUtils'
