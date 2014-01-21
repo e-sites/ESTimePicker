@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
 	s.license     	= { :type => 'BSD', :file => 'LICENSE' }
 	s.homepage    	= "https://github.com/e-sites/ESTimePicker"
 	s.source   		= { :git => 'https://github.com/e-sites/ESTimePicker.git', :tag => s.version }
-	s.source_files 	= 'Classes/ios/*.{h,m}'
+	s.source_files 	= 'ESTimePicker/*.{h,m}'
 	s.framework	 	= 'QuartzCore'
 	
 	s.dependency 'ESMathUtils', '~> 1.1'
