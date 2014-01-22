@@ -59,7 +59,7 @@ typedef NS_ENUM(NSUInteger, ESTimePickerType) {
 
 // __________________________________________________________________________________________
 
-/**
+/*!
  * The delegate of the time picker
  * @discussion You can use the time picker delegate to perform additional actions when an hour or minute is selected
  */
