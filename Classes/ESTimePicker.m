@@ -738,7 +738,6 @@ static double const kAnimationSpeed = 0.25f;
 
 - (void)dealloc
 {
-    NSLog(@"Dealloc");
 #if !__has_feature(objc_arc)
     [_font release], _font = nil;
     [_textColor release], _textColor = nil;
