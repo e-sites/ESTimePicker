@@ -37,6 +37,11 @@
 #import "ESTimePicker.h"
 #import "ESMathUtils.h"
 
+#if !__has_feature(objc_arc)
+    #define mrcRelease(obj) [obj release]
+#else
+    #define mrcRelease(obj)
+#endif
 
 // ######################################################################################################
 
@@ -226,23 +231,17 @@ static double const kAnimationSpeed = 0.25f;
     _lineView.timerPicker = self;
     [_lineView setBackgroundColor:[UIColor clearColor]];
     [self addSubview:_lineView];
-#if !__has_feature(objc_arc)
-    [_lineView release];
-    
-#endif
+    mrcRelease(_lineView);
     
     // Container
     _container = [[UIView alloc] initWithFrame:self.bounds];
     [self addSubview:_container];
-#if !__has_feature(objc_arc)
-    [_container release];
-#endif
+    mrcRelease(_container);
     
     _midDot = [[UIView alloc] init];
     [self addSubview:_midDot];
-#if !__has_feature(objc_arc)
-    [_midDot release];
-#endif
+    mrcRelease(_midDot);
+    
     // AM/PM
     [self addSubview:_amButton];
     [_amButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -327,9 +326,7 @@ static double const kAnimationSpeed = 0.25f;
 
 - (void)setWheelColor:(UIColor *)wheelColor
 {
-#if !__has_feature(objc_arc)
-    [_wheelColor release];
-#endif
+    mrcRelease(_wheelColor);
     _wheelColor = [wheelColor retain];
     [self _refreshAMPM];
     [self setNeedsDisplay];
@@ -337,9 +334,7 @@ static double const kAnimationSpeed = 0.25f;
 
 - (void)setFont:(UIFont *)font
 {
-#if !__has_feature(objc_arc)
-    [_font release];
-#endif
+    mrcRelease(_font);
     _font = [font retain];
     for (_ESTimePickerUILabel *lbl in _container.subviews) {
         [lbl setFont:font];
@@ -348,9 +343,7 @@ static double const kAnimationSpeed = 0.25f;
 
 - (void)setTextColor:(UIColor *)textColor
 {
-#if !__has_feature(objc_arc)
-    [_textColor release];
-#endif
+    mrcRelease(_textColor);
     _textColor = [textColor retain];
     for (_ESTimePickerUILabel *lbl in _container.subviews) {
         [lbl setTextColor:textColor];
@@ -368,18 +361,14 @@ static double const kAnimationSpeed = 0.25f;
 
 - (void)setSelectColor:(UIColor *)selectColor
 {
-#if !__has_feature(objc_arc)
-    [_selectColor release];
-#endif
+    mrcRelease(_selectColor);
     _selectColor = [selectColor retain];
     [_midDot setBackgroundColor:_selectColor];
 }
 
 - (void)setHighlightColor:(UIColor *)highlightColor
 {
-#if !__has_feature(objc_arc)
-    [_highlightColor release];
-#endif
+    mrcRelease(_highlightColor);
     _highlightColor = [highlightColor retain];
     [self _refreshAMPM];
     [_lineView setNeedsDisplay];
@@ -430,9 +419,7 @@ static double const kAnimationSpeed = 0.25f;
     UIImageView *imageView = [[UIImageView alloc] initWithImage:img];
     [imageView setFrame:_container.frame];
     [self addSubview:imageView];
-#if !__has_feature(objc_arc)
-    [imageView release];
-#endif
+    mrcRelease(imageView);
     _shouldMoveBack = YES;
     _type = newType;
     [self _refreshAMPM];
@@ -564,10 +551,7 @@ static double const kAnimationSpeed = 0.25f;
         }
         [lbl setText:[NSString stringWithFormat:@"%@%i", extra, v]];
         [_container addSubview:lbl];
-#if !__has_feature(objc_arc)
-        
-        [lbl release];
-#endif
+        mrcRelease(lbl);
         if (i == 11 && self.type == ESTimePickerTypeHours) {
             ringNumber = 1;
             radius *= 0.7;
@@ -591,9 +575,8 @@ static double const kAnimationSpeed = 0.25f;
     UIImageView *imageView2 = [[UIImageView alloc] initWithImage:img2];
     [imageView2 setFrame:_container.frame];
     [self addSubview:imageView2];
-#if !__has_feature(objc_arc)
-    [imageView2 release];
-#endif
+    mrcRelease(imageView2);
+    
     [_container setHidden:YES];
     
     if (_type == ESTimePickerTypeMinutes) {
@@ -724,12 +707,12 @@ static double const kAnimationSpeed = 0.25f;
 
 - (void)dealloc
 {
+#if !__has_feature(objc_arc)
     [_font release], _font = nil;
     [_textColor release], _textColor = nil;
     [_selectColor release], _selectColor = nil;
     [_highlightColor release], _highlightColor = nil;
     [_wheelColor release], _wheelColor = nil;
-#if !__has_feature(objc_arc)
     [super dealloc];
 #endif
 }
