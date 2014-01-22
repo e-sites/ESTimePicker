@@ -146,7 +146,7 @@
 
 
 @implementation ESTimePicker
-@synthesize wheelColor=_wheelColor,notation24Hours=_notation24Hours,type=_type,highlightColor=_highlightColor,delegate,minuteSnap,selectColor=_selectColor,font=_font,hours=_hours,minutes=_minutes,textColor=_textColor,automaticallySwitchToMinutes;
+@synthesize wheelColor=_wheelColor,notation24Hours=_notation24Hours,type=_type,highlightColor=_highlightColor,delegate,minuteSnap,selectColor=_selectColor,font=_font,hours=_hours,minutes=_minutes,textColor=_textColor,automaticallySwitchToMinutes,time;
 
 static CGFloat const kScaleFactor = 0.2f;
 static double const kAnimationSpeed = 0.25f;
@@ -218,7 +218,7 @@ static double const kAnimationSpeed = 0.25f;
     _minutes = [[fm stringFromDate:date] integerValue];
     [fm release];
     
-    _textColor = [[UIColor blackColor] retain];
+    _textColor = [[UIColor colorWithWhite:0.4 alpha:1] retain];
     _font = [[UIFont systemFontOfSize:16] retain];
     _wheelColor = [[UIColor whiteColor] retain];
     _selectColor = [[UIColor colorWithRed:54.0f / 255.0f green:181.0f / 255.0f blue:229.0f / 251.0f alpha:1] retain];
@@ -244,11 +244,11 @@ static double const kAnimationSpeed = 0.25f;
     
     // AM/PM
     [self addSubview:_amButton];
-    [_amButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [_amButton setTitleColor:_textColor forState:UIControlStateNormal];
     [_amButton setTitle:@"AM" forState:UIControlStateNormal];
     
     [self addSubview:_pmButton];
-    [_pmButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [_pmButton setTitleColor:_textColor forState:UIControlStateNormal];
     [_pmButton setTitle:@"PM" forState:UIControlStateNormal];
 
     
@@ -440,6 +440,14 @@ static double const kAnimationSpeed = 0.25f;
                          _animating = NO;
                          [imageView removeFromSuperview];
                      }];
+}
+
+- (NSString *)time
+{
+    if (self.isNotation24Hours) {
+        return [NSString stringWithFormat:@"%@:%@", [ESMathUtils prefixNumberBelowTen:self.hours], [ESMathUtils prefixNumberBelowTen:self.minutes]];
+    }
+    return [NSString stringWithFormat:@"%i:%@ %@", self.hours, [ESMathUtils prefixNumberBelowTen:self.minutes], _pm ? @"PM": @"AM"];
 }
 
 #pragma mark - Drawing

@@ -85,7 +85,7 @@ typedef NS_ENUM(NSUInteger, ESTimePickerType) {
 
 /**
  * The color of the text used in the picker
- * @discussion Default = black
+ * @discussion Default = gray
  */
 @property (nonatomic, retain) UIColor *textColor;
 
@@ -129,6 +129,11 @@ typedef NS_ENUM(NSUInteger, ESTimePickerType) {
  * }</code></pre>
  */
 @property (nonatomic, readwrite) ESTimePickerType type;
+
+/**
+ * Returns the current time in the correct format
+ */
+@property (nonatomic, readonly, assign) NSString *time;
 
 // __________________________________________________________________________________________
 
