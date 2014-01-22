@@ -123,10 +123,10 @@ typedef NS_ENUM(NSUInteger, ESTimePickerType) {
 
 /**
  * The type of view to show
- * typedef NS_ENUM(NSUInteger, ESTimePickerType) {
+ * @discussion <pre><code>typedef NS_ENUM(NSUInteger, ESTimePickerType) {
  *      ESTimePickerTypeHours,
  *      ESTimePickerTypeMinutes
- * }
+ * }</code></pre>
  */
 @property (nonatomic, readwrite) ESTimePickerType type;
 

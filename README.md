@@ -49,7 +49,7 @@ And then import the desired .h file:
 ```
 
 ## Documentation
-The official documentation can be found [here](https://rawgithub.com/e-sites/ESTimePicker/master/Documents/Classes/ESTimePicker.html).
+The official documentation can be found [here](http://cocoadocs.org/docsets/ESTimePicker/).
 
 ## Dependencies
 This class uses the `ESMathUtils` class (which is included)
