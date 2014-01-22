@@ -38,9 +38,9 @@
 #import "ESMathUtils.h"
 
 #if !__has_feature(objc_arc)
-    #define mrcRelease(obj) [obj release]
+#define mrcRelease(obj) [obj release]
 #else
-    #define mrcRelease(obj)
+#define mrcRelease(obj)
 #endif
 
 // ######################################################################################################
@@ -206,7 +206,7 @@ static double const kAnimationSpeed = 0.25f;
     _notation24Hours = NO;
     if ([formatStringForHours rangeOfString:@"a"].location != NSNotFound) {
         _pm = [[fm stringFromDate:date] isEqualToString:@"PM"];
-
+        
     } else {
         _notation24Hours = YES;
         [_pmButton setHidden:YES];
@@ -216,13 +216,20 @@ static double const kAnimationSpeed = 0.25f;
     _hours = [[fm stringFromDate:date] integerValue];
     [fm setDateFormat:@"m"];
     _minutes = [[fm stringFromDate:date] integerValue];
-    [fm release];
+    mrcRelease(fm);
     
-    _textColor = [[UIColor colorWithWhite:0.4 alpha:1] retain];
-    _font = [[UIFont systemFontOfSize:16] retain];
-    _wheelColor = [[UIColor whiteColor] retain];
-    _selectColor = [[UIColor colorWithRed:54.0f / 255.0f green:181.0f / 255.0f blue:229.0f / 251.0f alpha:1] retain];
-    _highlightColor = [[UIColor colorWithRed:213.0f / 255.0f green:240.0f / 255.0f blue:255.0f / 251.0f alpha:1] retain];
+    _textColor = [UIColor colorWithWhite:0.4 alpha:1];
+    _font = [UIFont systemFontOfSize:16];
+    _wheelColor = [UIColor whiteColor];
+    _selectColor = [UIColor colorWithRed:54.0f / 255.0f green:181.0f / 255.0f blue:229.0f / 251.0f alpha:1];
+    _highlightColor = [UIColor colorWithRed:213.0f / 255.0f green:240.0f / 255.0f blue:255.0f / 251.0f alpha:1];
+#if !__has_feature(objc_arc)
+    [_textColor retain];
+    [_font retain];
+    [_wheelColor retain];
+    [_selectColor retain];
+    [_highlightColor retain];
+#endif
     [self setBackgroundColor:[UIColor clearColor]];
     
     
@@ -250,7 +257,7 @@ static double const kAnimationSpeed = 0.25f;
     [self addSubview:_pmButton];
     [_pmButton setTitleColor:_textColor forState:UIControlStateNormal];
     [_pmButton setTitle:@"PM" forState:UIControlStateNormal];
-
+    
     
     [_amButton setBackgroundColor:_wheelColor];
     [_pmButton setBackgroundColor:_wheelColor];
@@ -279,7 +286,7 @@ static double const kAnimationSpeed = 0.25f;
         frame.origin.y += (frame.size.height - frame.size.width) / 2;
         frame.size.height = frame.size.width;
     }
-
+    
     [super setFrame:frame];
     [self setNeedsDisplay];
     [self _refresh];
@@ -327,7 +334,10 @@ static double const kAnimationSpeed = 0.25f;
 - (void)setWheelColor:(UIColor *)wheelColor
 {
     mrcRelease(_wheelColor);
-    _wheelColor = [wheelColor retain];
+    _wheelColor = wheelColor;
+#if !__has_feature(objc_arc)
+    [_wheelColor retain];
+#endif
     [self _refreshAMPM];
     [self setNeedsDisplay];
 }
@@ -335,7 +345,10 @@ static double const kAnimationSpeed = 0.25f;
 - (void)setFont:(UIFont *)font
 {
     mrcRelease(_font);
-    _font = [font retain];
+    _font = font;
+#if !__has_feature(objc_arc)
+    [_font retain];
+#endif
     for (_ESTimePickerUILabel *lbl in _container.subviews) {
         [lbl setFont:font];
     }
@@ -344,7 +357,10 @@ static double const kAnimationSpeed = 0.25f;
 - (void)setTextColor:(UIColor *)textColor
 {
     mrcRelease(_textColor);
-    _textColor = [textColor retain];
+    _textColor = textColor;
+#if !__has_feature(objc_arc)
+    [_textColor retain];
+#endif
     for (_ESTimePickerUILabel *lbl in _container.subviews) {
         [lbl setTextColor:textColor];
     }
@@ -362,14 +378,21 @@ static double const kAnimationSpeed = 0.25f;
 - (void)setSelectColor:(UIColor *)selectColor
 {
     mrcRelease(_selectColor);
-    _selectColor = [selectColor retain];
+    _selectColor = selectColor;
+#if !__has_feature(objc_arc)
+    [_selectColor retain];
+#endif
     [_midDot setBackgroundColor:_selectColor];
 }
 
 - (void)setHighlightColor:(UIColor *)highlightColor
 {
     mrcRelease(_highlightColor);
-    _highlightColor = [highlightColor retain];
+    _highlightColor = highlightColor;
+    
+#if !__has_feature(objc_arc)
+    [_highlightColor retain];
+#endif
     [self _refreshAMPM];
     [_lineView setNeedsDisplay];
 }
@@ -610,7 +633,7 @@ static double const kAnimationSpeed = 0.25f;
                          [imageView2 removeFromSuperview];
                      }];
     
-
+    
 }
 
 #pragma mark - Touches
@@ -715,6 +738,7 @@ static double const kAnimationSpeed = 0.25f;
 
 - (void)dealloc
 {
+    NSLog(@"Dealloc");
 #if !__has_feature(objc_arc)
     [_font release], _font = nil;
     [_textColor release], _textColor = nil;
