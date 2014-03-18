@@ -213,9 +213,9 @@ static double const kAnimationSpeed = 0.25f;
         [_amButton setHidden:YES];
     }
     [fm setDateFormat:@"H"];
-    _hours = [[fm stringFromDate:date] integerValue];
+    _hours = (int)[[fm stringFromDate:date] integerValue];
     [fm setDateFormat:@"m"];
-    _minutes = [[fm stringFromDate:date] integerValue];
+    _minutes = (int)[[fm stringFromDate:date] integerValue];
     mrcRelease(fm);
     
     _textColor = [UIColor colorWithWhite:0.4 alpha:1];
@@ -546,6 +546,7 @@ static double const kAnimationSpeed = 0.25f;
         CGRect f = CGRectMake(x, y, widthHeight, widthHeight);
         _ESTimePickerUILabel *lbl = [[_ESTimePickerUILabel alloc] initWithFrame:f];
         [lbl.layer setCornerRadius:widthHeight / 2];
+        [lbl setClipsToBounds:YES];
         [lbl setFont:self.font];
         [lbl setTextColor:self.textColor];
         [lbl setRingNumber:ringNumber];
@@ -681,7 +682,7 @@ static double const kAnimationSpeed = 0.25f;
         }
     }
     [self _positionTo:lbl];
-    int v = [lbl.text integerValue];
+    int v = (int)[lbl.text integerValue];
     if (self.type == ESTimePickerTypeHours && [self.delegate respondsToSelector:@selector(timePickerHoursChanged:toHours:)]) {
         if (_pm && !self.isNotation24Hours) {
             if (v < 12) {
