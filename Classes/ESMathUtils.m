@@ -123,6 +123,6 @@
 
 +(NSString *)prefixNumberBelowTen:(NSInteger)num
 {
-    return [NSString stringWithFormat:@"%@%i", (num<10?@"0":@""), num];
+    return [NSString stringWithFormat:@"%@%i", (num<10?@"0":@""), (int)num];
 }
 @end
