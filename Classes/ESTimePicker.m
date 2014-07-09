@@ -146,7 +146,7 @@
 
 
 @implementation ESTimePicker
-@synthesize wheelColor=_wheelColor,notation24Hours=_notation24Hours,type=_type,highlightColor=_highlightColor,delegate,minuteSnap,selectColor=_selectColor,font=_font,hours=_hours,minutes=_minutes,textColor=_textColor,automaticallySwitchToMinutes,time;
+@synthesize wheelColor=_wheelColor,notation24Hours=_notation24Hours,type=_type,highlightColor=_highlightColor,delegate,minuteSnap,selectColor=_selectColor,font=_font,hours=_hours,minutes=_minutes,textColor=_textColor,automaticallySwitch,time,seconds=_seconds;
 
 static CGFloat const kScaleFactor = 0.2f;
 static double const kAnimationSpeed = 0.25f;
@@ -193,8 +193,9 @@ static double const kAnimationSpeed = 0.25f;
     if (_initialized) { return; }
     _amButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _pmButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self setAutomaticallySwitchToMinutes:YES];
+    [self setAutomaticallySwitch:YES];
     [self setMinuteSnap:1];
+    [self setSecondSnap:1];
     self.type = ESTimePickerTypeHours;
     
     // 24 hour notation
@@ -416,6 +417,14 @@ static double const kAnimationSpeed = 0.25f;
     }
 }
 
+- (void)setSeconds:(int)seconds
+{
+    _seconds = seconds;
+    if (self.type == ESTimePickerTypeSeconds) {
+        [self _selectViewWithValue:self.seconds];
+    }
+}
+
 - (void)setType:(ESTimePickerType)newType
 {
     [self setType:newType animated:NO];
@@ -449,6 +458,7 @@ static double const kAnimationSpeed = 0.25f;
     [self addSubview:imageView];
     mrcRelease(imageView);
     _shouldMoveBack = YES;
+    ESTimePickerType oldType = _type;
     _type = newType;
     [self _refreshAMPM];
     [self _refresh];
@@ -458,7 +468,7 @@ static double const kAnimationSpeed = 0.25f;
                         options:UIViewAnimationOptionBeginFromCurrentState
                      animations:(void (^)(void)) ^{
                          imageView.alpha = 0;
-                         if (newType == ESTimePickerTypeMinutes) {
+                         if (newType > oldType) {
                              imageView.transform = CGAffineTransformMakeScale(1.0 + kScaleFactor, 1.0 + kScaleFactor);
                          } else {
                              imageView.transform = CGAffineTransformMakeScale(1.0 - kScaleFactor, 1.0 - kScaleFactor);
@@ -487,8 +497,8 @@ static double const kAnimationSpeed = 0.25f;
     [_pmButton setSelected:_pm];
     [_amButton setBackgroundColor:_amButton.isSelected ? _highlightColor : _wheelColor];
     [_pmButton setBackgroundColor:_pmButton.isSelected ? _highlightColor : _wheelColor];
-    [_amButton setHidden:_notation24Hours || self.type == ESTimePickerTypeMinutes];
-    [_pmButton setHidden:_notation24Hours || self.type == ESTimePickerTypeMinutes];
+    [_amButton setHidden:_notation24Hours || self.type == ESTimePickerTypeMinutes || self.type == ESTimePickerTypeSeconds];
+    [_pmButton setHidden:_notation24Hours || self.type == ESTimePickerTypeMinutes || self.type == ESTimePickerTypeSeconds];
 }
 
 - (void)drawRect:(CGRect)rect
@@ -523,7 +533,7 @@ static double const kAnimationSpeed = 0.25f;
     CGFloat centerY = CGRectGetMidX(self.bounds);
     int total = (self.notation24Hours ? 24 : 12);
     int rotateTotal = 12;
-    if (self.type == ESTimePickerTypeMinutes) {
+    if (self.type == ESTimePickerTypeMinutes || self.type == ESTimePickerTypeSeconds) {
         rotateTotal =
         total = 60;
     }
@@ -559,11 +569,15 @@ static double const kAnimationSpeed = 0.25f;
         [lbl setTextAlignment:NSTextAlignmentCenter];
         int v = (12 + i) % 24;
         NSString *extra = @"";
-        if (self.type == ESTimePickerTypeMinutes) {
+        if (self.type == ESTimePickerTypeMinutes || self.type == ESTimePickerTypeSeconds) {
             if (i % 5 > 0) {
                 [lbl setTextColor:[UIColor clearColor]];
             }
-            [lbl setSnap:i % self.minuteSnap == 0];
+            if (self.type == ESTimePickerTypeMinutes) {
+                [lbl setSnap:i % self.minuteSnap == 0];
+            } else {
+                [lbl setSnap:i % self.secondSnap == 0];
+            }
             v = i;
             if (v < 10) {
                 extra = @"0";
@@ -598,8 +612,12 @@ static double const kAnimationSpeed = 0.25f;
     if (!_shouldMoveBack) {
         if (self.type == ESTimePickerTypeHours) {
             [self _selectViewWithValue:self.hours];
-        } else {
+            
+        } else if (self.type == ESTimePickerTypeMinutes) {
             [self _selectViewWithValue:self.minutes];
+            
+        } else {
+            [self _selectViewWithValue:self.seconds];
         }
         return;
     }
@@ -616,7 +634,7 @@ static double const kAnimationSpeed = 0.25f;
     
     [_container setHidden:YES];
     
-    if (_type == ESTimePickerTypeMinutes) {
+    if (_type == ESTimePickerTypeMinutes || _type == ESTimePickerTypeSeconds) {
         imageView2.transform = CGAffineTransformMakeScale(1.0 - kScaleFactor, 1.0 - kScaleFactor);
     } else {
         imageView2.transform = CGAffineTransformMakeScale(1.0 + kScaleFactor, 1.0 + kScaleFactor);
@@ -633,8 +651,12 @@ static double const kAnimationSpeed = 0.25f;
                          [_container setHidden:NO];
                          if (self.type == ESTimePickerTypeHours) {
                              [self _selectViewWithValue:self.hours];
-                         } else {
+                             
+                         } else if (self.type == ESTimePickerTypeMinutes) {
                              [self _selectViewWithValue:self.minutes];
+                             
+                         } else {
+                             [self _selectViewWithValue:self.seconds];
                          }
                          [imageView2 removeFromSuperview];
                      }];
@@ -658,8 +680,11 @@ static double const kAnimationSpeed = 0.25f;
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (self.type == ESTimePickerTypeHours && self.shouldAutomaticallySwitchToMinutes) {
+    if (self.type == ESTimePickerTypeHours && self.shouldAutomaticallySwitch) {
         [self setType:ESTimePickerTypeMinutes animated:YES];
+        
+    } else if (self.type == ESTimePickerTypeMinutes && self.shouldAutomaticallySwitch && self.canEditSeconds) {
+        [self setType:ESTimePickerTypeSeconds animated:YES];
     }
 }
 
@@ -688,7 +713,7 @@ static double const kAnimationSpeed = 0.25f;
     }
     [self _positionTo:lbl];
     int v = (int)[lbl.text integerValue];
-    if (self.type == ESTimePickerTypeHours && [self.delegate respondsToSelector:@selector(timePickerHoursChanged:toHours:)]) {
+    if (self.type == ESTimePickerTypeHours) {
         if (_pm && !self.isNotation24Hours) {
             if (v < 12) {
                 v += 12;
@@ -698,11 +723,22 @@ static double const kAnimationSpeed = 0.25f;
         }
         if (_hours == v) { return; }
         _hours = v;
-        [self.delegate timePickerHoursChanged:self toHours:v];
-    } else if (self.type == ESTimePickerTypeMinutes && [self.delegate respondsToSelector:@selector(timePickerMinutesChanged:toMinutes:)]) {
+        if ([self.delegate respondsToSelector:@selector(timePickerHoursChanged:toHours:)]) {
+            [self.delegate timePickerHoursChanged:self toHours:v];
+        }
+    } else if (self.type == ESTimePickerTypeMinutes) {
         if (_minutes == v) { return; }
         _minutes = v;
-        [self.delegate timePickerMinutesChanged:self toMinutes:v];
+        if ([self.delegate respondsToSelector:@selector(timePickerMinutesChanged:toMinutes:)]) {
+            [self.delegate timePickerMinutesChanged:self toMinutes:v];
+        }
+        
+    } else if (self.type == ESTimePickerTypeSeconds && self.canEditSeconds) {
+        if (_seconds == v) { return; }
+        _seconds = v;
+        if ([self.delegate respondsToSelector:@selector(timePickerSecondsChanged:toSeconds:)]) {
+            [self.delegate timePickerSecondsChanged:self toSeconds:v];
+        }
     }
 }
 

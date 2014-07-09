@@ -40,7 +40,8 @@
 
 typedef NS_ENUM(NSUInteger, ESTimePickerType) {
     ESTimePickerTypeHours,
-    ESTimePickerTypeMinutes
+    ESTimePickerTypeMinutes,
+    ESTimePickerTypeSeconds
 };
 
 @class ESTimePicker;
@@ -51,6 +52,7 @@ typedef NS_ENUM(NSUInteger, ESTimePickerType) {
 - (void)timePickerMinutesChanged:(ESTimePicker *)timePicker toMinutes:(int)minutes;
 
 @optional
+- (void)timePickerSecondsChanged:(ESTimePicker *)timePicker toSeconds:(int)seconds;
 - (void)timePickerChangedType:(ESTimePicker *)timePicker toView:(ESTimePickerType)type;
 @end
 
@@ -109,20 +111,37 @@ typedef NS_ENUM(NSUInteger, ESTimePickerType) {
 @property (nonatomic, readwrite) int minutes;
 
 /**
+ * The current selected seconds
+ */
+@property (nonatomic, readwrite) int seconds;
+
+/**
  * Is the picker in a 24-hour format or AM/PM
  */
 @property (nonatomic, readwrite, getter=isNotation24Hours) BOOL notation24Hours;
 
 /**
- * When an hour is selected, should the pickerview automatically go to the minute view
+ * When an hour is selected, should the pickerview automatically go to the minute view (and also from minutes > seconds)
  */
-@property (nonatomic, readwrite, getter=shouldAutomaticallySwitchToMinutes) BOOL automaticallySwitchToMinutes;
+@property (nonatomic, readwrite, getter=shouldAutomaticallySwitch) BOOL automaticallySwitch;
+
+/**
+ *  Can the picker also edit seconds
+ *  @discussion Default = NO
+ */
+@property (nonatomic, readwrite, getter=canEditSeconds) BOOL editSeconds;
 
 /**
  * Snaps the minutes to a specific value
  * @discussion Default = 1
  */
 @property (nonatomic, readwrite) unsigned int minuteSnap;
+
+/**
+ * Snaps the seconds to a specific value
+ * @discussion Default = 1
+ */
+@property (nonatomic, readwrite) unsigned int secondSnap;
 
 /**
  * The type of view to show
