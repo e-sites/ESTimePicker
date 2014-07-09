@@ -432,6 +432,10 @@ static double const kAnimationSpeed = 0.25f;
         _type = newType;
         return;
     }
+    if ([self.delegate respondsToSelector:@selector(timePickerChangedType:toView:)]) {
+        [self.delegate timePickerChangedType:self toView:newType];
+    }
+    
     [_midDot setHidden:YES];
     _animating = YES;
     [_lineView setHidden:YES];

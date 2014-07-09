@@ -49,6 +49,9 @@ typedef NS_ENUM(NSUInteger, ESTimePickerType) {
 @required
 - (void)timePickerHoursChanged:(ESTimePicker *)timePicker toHours:(int)hours;
 - (void)timePickerMinutesChanged:(ESTimePicker *)timePicker toMinutes:(int)minutes;
+
+@optional
+- (void)timePickerChangedType:(ESTimePicker *)timePicker toView:(ESTimePickerType)type;
 @end
 
 @interface ESTimePicker : UIView
