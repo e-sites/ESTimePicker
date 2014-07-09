@@ -426,14 +426,15 @@ static double const kAnimationSpeed = 0.25f;
     if (newType == _type || _animating) {
         return;
     }
-    if (!animated) {
-        [self _refreshAMPM];
-        [self _refresh];
-        _type = newType;
-        return;
-    }
     if ([self.delegate respondsToSelector:@selector(timePickerChangedType:toView:)]) {
         [self.delegate timePickerChangedType:self toView:newType];
+    }
+    
+    if (!animated) {
+        _type = newType;
+        [self _refreshAMPM];
+        [self _refresh];
+        return;
     }
     
     [_midDot setHidden:YES];
@@ -728,11 +729,11 @@ static double const kAnimationSpeed = 0.25f;
             value = 12;
         }
     }
-    
     for (_ESTimePickerUILabel *lbl in _container.subviews) {
         if ([lbl.text integerValue] == value) {
             [self _positionTo:lbl];
-            break;
+        } else {
+            [lbl setBackgroundColor:[UIColor clearColor]];
         }
     }
 }
