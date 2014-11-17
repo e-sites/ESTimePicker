@@ -134,6 +134,7 @@
     BOOL _pm;
     UIButton *_pmButton;
     BOOL _initialized;
+    UIPanGestureRecognizer *_panGestureRecognizer;
     UIView *_container;
     BOOL _animating;
 }
@@ -275,6 +276,14 @@ static double const kAnimationSpeed = 0.25f;
     _initialized = YES;
     [self _refreshAMPM];
     [self setNeedsDisplay];
+    
+    _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(_pan:)];
+    [_panGestureRecognizer setMaximumNumberOfTouches:1];
+    [self addGestureRecognizer:_panGestureRecognizer];
+
+#if !__has_feature(objc_arc)
+    [_panGestureRecognizer release];
+#endif
 }
 
 - (void)setFrame:(CGRect)frame
@@ -667,18 +676,7 @@ static double const kAnimationSpeed = 0.25f;
 #pragma mark - Touches
 // ____________________________________________________________________________________________________________________
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [self _touch:[[touches anyObject] locationInView:self]];
-}
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [self _touch:[[touches anyObject] locationInView:self]];
-    
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)_end
 {
     if (self.type == ESTimePickerTypeHours && self.shouldAutomaticallySwitch) {
         [self setType:ESTimePickerTypeMinutes animated:YES];
@@ -686,6 +684,16 @@ static double const kAnimationSpeed = 0.25f;
     } else if (self.type == ESTimePickerTypeMinutes && self.shouldAutomaticallySwitch && self.canEditSeconds) {
         [self setType:ESTimePickerTypeSeconds animated:YES];
     }
+}
+
+- (void)_pan:(UIPanGestureRecognizer *)gesture
+{
+    if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
+        [self _end];
+        return;
+    }
+    CGPoint point = [gesture locationInView:self];
+    [self _touch:point];
 }
 
 - (void)_touch:(CGPoint)point
@@ -780,6 +788,7 @@ static double const kAnimationSpeed = 0.25f;
 
 - (void)dealloc
 {
+    [self removeGestureRecognizer:_panGestureRecognizer];
 #if !__has_feature(objc_arc)
     [_font release], _font = nil;
     [_textColor release], _textColor = nil;
