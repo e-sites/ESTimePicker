@@ -134,6 +134,7 @@
     BOOL _pm;
     UIButton *_pmButton;
     BOOL _initialized;
+    UITapGestureRecognizer *_tapGestureRecognizer;
     UIPanGestureRecognizer *_panGestureRecognizer;
     UIView *_container;
     BOOL _animating;
@@ -277,11 +278,16 @@ static double const kAnimationSpeed = 0.25f;
     [self _refreshAMPM];
     [self setNeedsDisplay];
     
-    _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(_pan:)];
+    _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_tapPan:)];
+    [_tapGestureRecognizer setNumberOfTapsRequired:1];
+    [self addGestureRecognizer:_tapGestureRecognizer];
+    
+    _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(_tapPan:)];
     [_panGestureRecognizer setMaximumNumberOfTouches:1];
     [self addGestureRecognizer:_panGestureRecognizer];
 
 #if !__has_feature(objc_arc)
+    [_tapGestureRecognizer release];
     [_panGestureRecognizer release];
 #endif
 }
@@ -686,19 +692,15 @@ static double const kAnimationSpeed = 0.25f;
     }
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)_tapPan:(UIGestureRecognizer *)gesture
 {
-    [self _touch:[[touches anyObject] locationInView:self]];
-}
-
-- (void)_pan:(UIPanGestureRecognizer *)gesture
-{
+    CGPoint point = [gesture locationInView:self];
+    [self _touch:point];
+    
     if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
         [self _end];
         return;
     }
-    CGPoint point = [gesture locationInView:self];
-    [self _touch:point];
 }
 
 - (void)_touch:(CGPoint)point
@@ -793,6 +795,7 @@ static double const kAnimationSpeed = 0.25f;
 
 - (void)dealloc
 {
+    [self removeGestureRecognizer:_tapGestureRecognizer];
     [self removeGestureRecognizer:_panGestureRecognizer];
 #if !__has_feature(objc_arc)
     [_font release], _font = nil;
