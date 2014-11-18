@@ -686,6 +686,11 @@ static double const kAnimationSpeed = 0.25f;
     }
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self _touch:[[touches anyObject] locationInView:self]];
+}
+
 - (void)_pan:(UIPanGestureRecognizer *)gesture
 {
     if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
