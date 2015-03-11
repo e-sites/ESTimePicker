@@ -35,6 +35,7 @@
 //  - Added class method 'prefixNumberBelowTen'
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface ESMathUtils : NSObject
 
